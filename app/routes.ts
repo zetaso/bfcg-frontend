@@ -22,5 +22,4 @@ export default [
         route("services/:id", "./pages/admin/ServiceEdit.tsx"),
     ]),
 
-    route(".well-known/*", "./routes/well-known.ts"),
 ] satisfies RouteConfig;

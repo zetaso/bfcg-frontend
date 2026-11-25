@@ -1,0 +1,196 @@
+{
+  "buildManifest": {
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "root.tsx",
+        "path": ""
+      },
+      "layouts/Main": {
+        "id": "layouts/Main",
+        "parentId": "root",
+        "file": "./layouts/Main.tsx"
+      },
+      "pages/Home": {
+        "id": "pages/Home",
+        "parentId": "layouts/Main",
+        "file": "./pages/Home.tsx",
+        "index": true
+      },
+      "pages/Services": {
+        "id": "pages/Services",
+        "parentId": "layouts/Main",
+        "file": "./pages/Services.tsx",
+        "path": "services"
+      },
+      "pages/ServiceDetail": {
+        "id": "pages/ServiceDetail",
+        "parentId": "layouts/Main",
+        "file": "./pages/ServiceDetail.tsx",
+        "path": "services/:slug"
+      },
+      "pages/admin/Login": {
+        "id": "pages/admin/Login",
+        "parentId": "root",
+        "file": "./pages/admin/Login.tsx",
+        "path": "admin/login"
+      },
+      "layouts/Admin": {
+        "id": "layouts/Admin",
+        "parentId": "root",
+        "file": "./layouts/Admin.tsx",
+        "path": "admin"
+      },
+      "pages/admin/Settings": {
+        "id": "pages/admin/Settings",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/Settings.tsx",
+        "index": true
+      },
+      "pages/admin/Services": {
+        "id": "pages/admin/Services",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/Services.tsx",
+        "path": "services"
+      },
+      "pages/admin/ServiceEdit": {
+        "id": "pages/admin/ServiceEdit",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/ServiceEdit.tsx",
+        "path": "services/:id"
+      }
+    }
+  },
+  "reactRouterConfig": {
+    "appDirectory": "/home/zso/Projects/BFCG/frontend/app",
+    "basename": "/",
+    "buildDirectory": "/home/zso/Projects/BFCG/frontend/build",
+    "future": {
+      "unstable_customRouteDiscovery": false,
+      "unstable_enableNodeReadableStream": false,
+      "unstable_optimizeDeps": false
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "root.tsx",
+        "path": ""
+      },
+      "layouts/Main": {
+        "id": "layouts/Main",
+        "parentId": "root",
+        "file": "./layouts/Main.tsx"
+      },
+      "pages/Home": {
+        "id": "pages/Home",
+        "parentId": "layouts/Main",
+        "file": "./pages/Home.tsx",
+        "index": true
+      },
+      "pages/Services": {
+        "id": "pages/Services",
+        "parentId": "layouts/Main",
+        "file": "./pages/Services.tsx",
+        "path": "services"
+      },
+      "pages/ServiceDetail": {
+        "id": "pages/ServiceDetail",
+        "parentId": "layouts/Main",
+        "file": "./pages/ServiceDetail.tsx",
+        "path": "services/:slug"
+      },
+      "pages/admin/Login": {
+        "id": "pages/admin/Login",
+        "parentId": "root",
+        "file": "./pages/admin/Login.tsx",
+        "path": "admin/login"
+      },
+      "layouts/Admin": {
+        "id": "layouts/Admin",
+        "parentId": "root",
+        "file": "./layouts/Admin.tsx",
+        "path": "admin"
+      },
+      "pages/admin/Settings": {
+        "id": "pages/admin/Settings",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/Settings.tsx",
+        "index": true
+      },
+      "pages/admin/Services": {
+        "id": "pages/admin/Services",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/Services.tsx",
+        "path": "services"
+      },
+      "pages/admin/ServiceEdit": {
+        "id": "pages/admin/ServiceEdit",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/ServiceEdit.tsx",
+        "path": "services/:id"
+      }
+    },
+    "routeDiscovery": {
+      "mode": "initial"
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": false,
+    "splitRouteModules": true,
+    "subResourceIntegrity": false,
+    "allowedActionOrigins": false,
+    "unstable_routeConfig": [
+      {
+        "id": "root",
+        "path": "",
+        "file": "root.tsx",
+        "children": [
+          {
+            "file": "./layouts/Main.tsx",
+            "children": [
+              {
+                "file": "./pages/Home.tsx",
+                "index": true
+              },
+              {
+                "file": "./pages/Services.tsx",
+                "path": "services"
+              },
+              {
+                "file": "./pages/ServiceDetail.tsx",
+                "path": "services/:slug"
+              }
+            ]
+          },
+          {
+            "file": "./pages/admin/Login.tsx",
+            "path": "admin/login"
+          },
+          {
+            "file": "./layouts/Admin.tsx",
+            "children": [
+              {
+                "file": "./pages/admin/Settings.tsx",
+                "index": true
+              },
+              {
+                "file": "./pages/admin/Services.tsx",
+                "path": "services"
+              },
+              {
+                "file": "./pages/admin/ServiceEdit.tsx",
+                "path": "services/:id"
+              }
+            ],
+            "path": "admin"
+          }
+        ]
+      }
+    ]
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}
