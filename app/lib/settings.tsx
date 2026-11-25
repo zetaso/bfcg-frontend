@@ -24,6 +24,9 @@ export const DEFAULT_SETTINGS = {
   "services.subtitle": "Asesoría especializada adaptada a las necesidades de tu organización.",
   "services.cta_label": "Ver más",
 
+  "testimonials.title": "Lo que dicen nuestros clientes",
+  "testimonials.subtitle": "Empresas que ya confiaron en nosotros.",
+
   "contact.title": "Contáctanos",
   "contact.form_title": "Escríbenos",
   "contact.submit_label": "Enviar",

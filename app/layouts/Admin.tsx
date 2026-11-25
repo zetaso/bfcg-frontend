@@ -12,6 +12,7 @@ export async function clientLoader() {
 const TABS = [
   { to: "/admin", label: "Textos del sitio", end: true },
   { to: "/admin/services", label: "Servicios", end: false },
+  { to: "/admin/testimonials", label: "Testimonios", end: false },
 ];
 
 export default function AdminLayout({ loaderData }: Route.ComponentProps) {

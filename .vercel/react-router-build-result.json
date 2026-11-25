@@ -58,6 +58,12 @@
         "parentId": "layouts/Admin",
         "file": "./pages/admin/ServiceEdit.tsx",
         "path": "services/:id"
+      },
+      "pages/admin/Testimonials": {
+        "id": "pages/admin/Testimonials",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/Testimonials.tsx",
+        "path": "testimonials"
       }
     }
   },
@@ -128,6 +134,12 @@
         "parentId": "layouts/Admin",
         "file": "./pages/admin/ServiceEdit.tsx",
         "path": "services/:id"
+      },
+      "pages/admin/Testimonials": {
+        "id": "pages/admin/Testimonials",
+        "parentId": "layouts/Admin",
+        "file": "./pages/admin/Testimonials.tsx",
+        "path": "testimonials"
       }
     },
     "routeDiscovery": {
@@ -180,6 +192,10 @@
               {
                 "file": "./pages/admin/ServiceEdit.tsx",
                 "path": "services/:id"
+              },
+              {
+                "file": "./pages/admin/Testimonials.tsx",
+                "path": "testimonials"
               }
             ],
             "path": "admin"

@@ -14,7 +14,7 @@ type SettingRow = {
 };
 
 // sections in page order; anything else is listed after these
-const SECTION_ORDER = ["Portada", "Nosotros", "Servicios", "Contacto", "Pie de página"];
+const SECTION_ORDER = ["Portada", "Nosotros", "Servicios", "Testimonios", "Contacto", "Pie de página"];
 
 export async function clientLoader() {
   const { data } = await adminFetch<{ data: SettingRow[] }>("/sitesettings");

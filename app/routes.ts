@@ -20,6 +20,7 @@ export default [
         index("./pages/admin/Settings.tsx"),
         route("services", "./pages/admin/Services.tsx"),
         route("services/:id", "./pages/admin/ServiceEdit.tsx"),
+        route("testimonials", "./pages/admin/Testimonials.tsx"),
     ]),
 
 ] satisfies RouteConfig;
