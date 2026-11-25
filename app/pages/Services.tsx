@@ -2,6 +2,8 @@ import ServicesComponent from "~/components/services/ServicesComponent";
 
 export default function Services() {
   return (
-    <ServicesComponent/>
+    <div className="pt-20">
+      <ServicesComponent />
+    </div>
   );
 }

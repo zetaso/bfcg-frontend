@@ -14,5 +14,13 @@ export default [
 
     // route("login", "./pages/Login.tsx"),
 
+    // admin panel: login is outside the guarded layout
+    route("admin/login", "./pages/admin/Login.tsx"),
+    route("admin", "./layouts/Admin.tsx", [
+        index("./pages/admin/Settings.tsx"),
+        route("services", "./pages/admin/Services.tsx"),
+        route("services/:id", "./pages/admin/ServiceEdit.tsx"),
+    ]),
+
     route(".well-known/*", "./routes/well-known.ts"),
 ] satisfies RouteConfig;

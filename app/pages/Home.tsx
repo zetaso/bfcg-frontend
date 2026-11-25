@@ -6,11 +6,11 @@ import ContactComponent from "../components/ContactComponent";
 export default function Home() {
 
   return (
-    <main className="mx-auto">
+    <div>
       <HeroComponent/>
       <AboutComponent/>
       <ServicesComponent/>
       <ContactComponent/>
-    </main>
+    </div>
   );
 }

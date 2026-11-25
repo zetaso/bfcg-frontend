@@ -19,13 +19,13 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:wght@500;600;700;800&display=swap",
   },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -39,6 +39,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   );
+}
+
+// Shown while route clientLoaders (e.g. site_settings in layouts/Main) run on first load.
+// In SPA mode this may only be exported from the root route.
+export function HydrateFallback() {
+  return <div className="min-h-screen bg-mist" />;
 }
 
 export default function App() {
@@ -63,10 +69,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return (
     <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
+      <h1 className="text-4xl font-bold text-ink border-l-8 border-primary pl-4">{message}</h1>
+      <p className="mt-4 text-charcoal">{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre className="w-full mt-4 p-4 overflow-x-auto bg-paper border border-line">
           <code>{stack}</code>
         </pre>
       )}
