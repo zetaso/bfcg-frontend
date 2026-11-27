@@ -189,7 +189,7 @@ export default function AdminServiceEdit({ loaderData }: Route.ComponentProps) {
                     Quitar imagen
                   </Button>
                 )}
-                <span className="text-xs text-steel">JPG, PNG o WebP. Máximo 5 MB.</span>
+                <span className="text-xs text-steel">JPG, PNG o WebP, hasta 20 MB. Se reduce y optimiza automáticamente al subirla.</span>
               </div>
             </div>
           </Field>

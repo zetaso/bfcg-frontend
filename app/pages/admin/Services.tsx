@@ -123,7 +123,7 @@ export default function AdminServices({ loaderData }: Route.ComponentProps) {
               </div>
 
               {s.image_url ? (
-                <img src={s.image_url} alt="" className="h-14 w-20 object-cover border border-line" />
+                <img src={s.image_url} alt="" loading="lazy" decoding="async" className="h-14 w-20 object-cover border border-line" />
               ) : (
                 <div className="h-14 w-20 bg-mist border border-line" />
               )}

@@ -63,17 +63,26 @@ export default function ServicesComponent() {
         {!loading && !error && (
           <div className="grid md:grid-cols-2 border-t border-l border-line">
             {services.map((service) => (
-              <div className="border-b border-r border-line">
+              <div key={service.id} className="border-b border-r border-line">
                 <article
-                  key={service.id}
                   className="group bg-paper flex flex-col border-t-4 border-transparent hover:border-primary transition-colors duration-150"
                 >
                   {service.image_url && (
-                    <img
-                      src={service.image_url}
-                      alt={service.title}
-                      className="w-full aspect-video object-cover group-hover:brightness-90 duration-150"
-                    />
+                    <Link
+                        to={`/services/${service.slug}`}
+                        className="w-full aspect-video relative overflow-hidden"
+                      >
+                      <img
+                        src={service.image_url}
+                        alt={service.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full aspect-video object-cover"
+                      />
+                      <div
+                        className="absolute inset-0 bg-black opacity-0 group-hover:opacity-15 transition-opacity duration-150"
+                      ></div>
+                    </Link>
                   )}
                   <div className="flex-1 p-8 flex flex-col gap-4">
                     <h3 className="text-2xl font-semibold text-ink">{service.title}</h3>

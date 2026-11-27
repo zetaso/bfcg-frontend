@@ -93,7 +93,7 @@ export default function ServiceDetailComponent({ slug }: { slug: string }) {
           <div className="grid gap-10 md:grid-cols-3">
             <div className="md:col-span-2 bg-paper border border-line">
               {service.image_url && (
-                <img src={service.image_url} alt={service.title} className="w-full aspect-video object-cover" />
+                <img src={service.image_url} alt={service.title} decoding="async" className="w-full aspect-video object-cover" />
               )}
               <div className="p-8 md:p-10 flex flex-col gap-8">
                 
