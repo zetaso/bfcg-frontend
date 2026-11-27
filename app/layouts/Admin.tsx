@@ -1,12 +1,13 @@
 import { NavLink, Outlet, redirect } from "react-router";
 import type { Route } from "./+types/Admin";
-import { adminFetch, getSession, logout, LOGIN_PATH } from "../lib/api";
+import { currentSession, logout, LOGIN_PATH } from "../lib/api";
+import SessionWatcher from "../components/admin/SessionWatcher";
 
-// Guard: every /admin page needs a valid admin session (adminFetch refreshes or redirects).
+// Guard: every /admin page needs a live admin session.
 export async function clientLoader() {
-  if (!getSession()) throw redirect(LOGIN_PATH);
-  const { user } = await adminFetch<{ user: { email: string } }>("/me");
-  return { email: user.email };
+  const me = await currentSession();
+  if (!me) throw redirect(LOGIN_PATH);
+  return { email: me.user.email, session: me.session };
 }
 
 const TABS = [
@@ -53,6 +54,8 @@ export default function AdminLayout({ loaderData }: Route.ComponentProps) {
       <main className="flex-1 max-w-300 w-full mx-auto px-4 py-10">
         <Outlet />
       </main>
+
+      <SessionWatcher initial={loaderData.session} />
     </div>
   );
 }

@@ -1,14 +1,16 @@
 export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 
 export const LOGIN_PATH = "/admin/login";
-const SESSION_KEY = "bfcg.admin.session";
 
-export type Session = {
-  access_token: string;
-  refresh_token: string;
-  expires_at?: number; // unix seconds
-  user: { id: string; email: string };
+/** Fired after every successful admin request; the session watcher uses it to reset its idle timer. */
+export const SESSION_TOUCH_EVENT = "bfcg:session-touch";
+
+export type SessionInfo = {
+  idle_timeout_seconds: number;
+  expires_at: string; // absolute limit (ISO date)
 };
+
+export type Me = { user: { email: string }; session: SessionInfo };
 
 export class ApiError extends Error {
   constructor(message: string, public status: number) {
@@ -16,34 +18,12 @@ export class ApiError extends Error {
   }
 }
 
-// ── session storage (browser only) ──
-
-export function getSession(): Session | null {
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as Session) : null;
-  } catch {
-    return null;
-  }
+// Tokens used to be kept in localStorage; they now live in httpOnly cookies. Remove any leftover copy.
+try {
+  if (typeof localStorage !== "undefined") localStorage.removeItem("bfcg.admin.session");
+} catch {
+  /* ignore */
 }
-
-export function setSession(session: Session) {
-  try {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  } catch {
-    /* storage unavailable: session lasts for this page only */
-  }
-}
-
-export function clearSession() {
-  try {
-    localStorage.removeItem(SESSION_KEY);
-  } catch {
-    /* ignore */
-  }
-}
-
-// ── requests ──
 
 async function readError(res: Response) {
   try {
@@ -54,81 +34,57 @@ async function readError(res: Response) {
   }
 }
 
-export async function login(email: string, password: string): Promise<Session> {
+/** Sends the user to the login page; `expired` shows the "session expired" notice there. */
+export function goToLogin(expired = false): never {
+  window.location.assign(expired ? `${LOGIN_PATH}?expired=1` : LOGIN_PATH);
+  throw new ApiError("Sesión expirada.", 401);
+}
+
+export async function login(email: string, password: string): Promise<Me> {
   const res = await fetch(`${API_URL}/api/v1/auth/login`, {
     method: "POST",
+    credentials: "include", // lets the API set the httpOnly session cookies
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
   if (!res.ok) throw new ApiError(await readError(res), res.status);
-  const session = (await res.json()) as Session;
-  setSession(session);
-  return session;
+  return (await res.json()) as Me;
 }
 
-export function logout() {
-  clearSession();
-  window.location.assign(LOGIN_PATH);
+export async function logout() {
+  try {
+    await fetch(`${API_URL}/api/v1/admin/logout`, { method: "POST", credentials: "include" });
+  } finally {
+    window.location.assign(LOGIN_PATH);
+  }
 }
 
-let refreshing: Promise<Session | null> | null = null;
-
-/** Exchanges the refresh token for a new session; concurrent callers share one request. */
-function refreshSession(current: Session): Promise<Session | null> {
-  refreshing ??= (async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/v1/auth/refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh_token: current.refresh_token }),
-      });
-      if (!res.ok) return null;
-      const next = (await res.json()) as Session;
-      setSession(next);
-      return next;
-    } catch {
-      return null;
-    } finally {
-      refreshing = null;
-    }
-  })();
-  return refreshing;
-}
-
-function sendToLogin(): never {
-  clearSession();
-  window.location.assign(LOGIN_PATH);
-  throw new ApiError("Sesión expirada.", 401);
+/** Checks for a live session without redirecting (used by the login page). */
+export async function currentSession(): Promise<Me | null> {
+  try {
+    const res = await fetch(`${API_URL}/api/v1/admin/me`, { credentials: "include" });
+    return res.ok ? ((await res.json()) as Me) : null;
+  } catch {
+    return null;
+  }
 }
 
 /**
- * Authenticated request to /api/v1/admin/*. Refreshes the token when it is about to expire
- * or the API answers 401; if that fails, the user is sent back to the login page.
+ * Request to /api/v1/admin/*. The browser attaches the session cookies; the API refreshes tokens
+ * and enforces the idle / absolute limits. A 401 means the session is over: back to the login page.
  */
 export async function adminFetch<T = unknown>(path: string, init: RequestInit = {}): Promise<T> {
-  let session = getSession();
-  if (!session) sendToLogin();
-
-  const expiresSoon = session.expires_at && session.expires_at * 1000 < Date.now() + 60_000;
-  if (expiresSoon) session = (await refreshSession(session)) ?? sendToLogin();
-
-  const send = (token: string) => {
-    const headers = new Headers(init.headers);
-    headers.set("Authorization", `Bearer ${token}`);
-    if (init.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) {
-      headers.set("Content-Type", "application/json");
-    }
-    return fetch(`${API_URL}/api/v1/admin${path}`, { ...init, headers });
-  };
-
-  let res = await send(session.access_token);
-  if (res.status === 401) {
-    session = (await refreshSession(session)) ?? sendToLogin();
-    res = await send(session.access_token);
-    if (res.status === 401) sendToLogin();
+  const headers = new Headers(init.headers);
+  if (init.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
   }
 
+  const res = await fetch(`${API_URL}/api/v1/admin${path}`, { ...init, headers, credentials: "include" });
+
+  if (res.status === 401) goToLogin(true);
   if (!res.ok) throw new ApiError(await readError(res), res.status);
+
+  window.dispatchEvent(new Event(SESSION_TOUCH_EVENT));
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;
 }

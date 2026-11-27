@@ -1,15 +1,17 @@
 import { useState, type FormEvent } from "react";
-import { redirect, useNavigate } from "react-router";
-import { getSession, login } from "../../lib/api";
+import { redirect, useNavigate, useSearchParams } from "react-router";
+import { currentSession, login } from "../../lib/api";
 import { inputClass } from "../../components/admin/ui";
 
 export async function clientLoader() {
-  if (getSession()) throw redirect("/admin");
+  if (await currentSession()) throw redirect("/admin");
   return null;
 }
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const expired = params.get("expired") === "1";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +63,11 @@ export default function AdminLogin() {
           className={inputClass}
         />
 
+        {expired && !error && (
+          <p className="border-l-4 border-primary bg-primary-soft px-3 py-2 text-sm text-charcoal">
+            Tu sesión expiró. Vuelve a iniciar sesión.
+          </p>
+        )}
         {error && <p className="border-l-4 border-danger bg-paper px-3 py-2 text-sm text-danger">{error}</p>}
 
         <button
